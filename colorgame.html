@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+    <title>Color Game</title>
+    <link rel="stylesheet" type="text/css" href="colorgame.css">
+</head>
+<body>
+    <h1>
+        The Great<br><span id="colordisplay">RGB</span><br>Guessing Game
+    </h1>
+
+    <div id="strip">
+        <button id="reset">New Colors</button>
+        <span id="messagedisplay"></span>
+        <button id="easy" class="mode">Easy</button>
+        <button id="normal" class="mode selected">Normal</button>
+        <button id="hard" class="mode">Hard</button>
+    </div>
+
+    <div id="container">
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+    </div>
+
+    <script type="text/javascript" src="colorgame.js"></script>
+</body>
+<script>
+        // game logic
+        /* selected elemenets */
+        var header = document.querySelector("h1");
+        var messageDisplay = document.querySelector("#messagedisplay");
+        var colorDisplay = document.querySelector("#colordisplay");
+        var currentMode = document.querySelector("#normal");
+        var resetButton = document.querySelector("#reset");
+        var modeButtons = document.querySelectorAll(".mode");
+        var squares = document.querySelectorAll(".square");
+
+        init();
+        gameReset();
+
+        function init() {
+            /* use custom attribute to store the number of squares in different modes */
+            document.querySelector("#easy").setAttribute("numSquares", "3");
+            document.querySelector("#normal").setAttribute("numSquares", "6");
+            document.querySelector("#hard").setAttribute("numSquares", "9");
+
+            resetButton.addEventListener("click", gameReset);
+            for (var i = 0; i < modeButtons.length; i++) {
+                modeButtons[i].addEventListener("click", function(){
+                    for (var b = 0; b < modeButtons.length; b++) {
+                        modeButtons[b].classList.remove("selected");
+                    }
+                    this.classList.add("selected");
+                    currentMode = this;
+                    gameReset();
+                });
+            }
+        }
+
+        function gameReset() {
+            updateSquares();
+            colorDisplay.textContent = pickColor();
+            resetButton.textContent = "New Colors";
+            header.style.backgroundColor = "steelblue";
+            messageDisplay.textContent = "";
+        }
+
+        function updateSquares() {
+            var numSquares = currentMode.getAttribute("numSquares");
+            for (var i = 0; i < squares.length; i++) {
+                if (i < numSquares) {
+                    squares[i].style.backgroundColor = randomColor();
+                    squares[i].style.display = "block";
+                }
+                else {
+                    squares[i].style.display = "none";
+                }
+
+                squares[i].addEventListener("click", function() {
+                    if (this.style.backgroundColor === colorDisplay.textContent) {
+                        messageDisplay.textContent = "Correct!";
+                        resetButton.textContent = "Play again?"
+                        changeColor(colorDisplay.textContent);
+                    }
+                    else {
+                        this.style.backgroundColor = "#232323";
+                        messageDisplay.textContent = "Try Again";
+                    }
+                });
+            }
+        }
+
+        function randomColor() {
+            var red = Math.floor(Math.random() * 256);
+            var green = Math.floor(Math.random() * 256);
+            var blue = Math.floor(Math.random() * 256);
+            return  "rgb(" + red + ", " + green + ", " + blue + ")";
+        }
+
+        function pickColor() {
+            return squares[Math.floor(Math.random() * currentMode.getAttribute("numSquares"))].style.backgroundColor;
+        }
+
+        function changeColor(c) {
+            header.style.backgroundColor = colorDisplay.textContent;
+            var squares = document.querySelectorAll(".square");
+            for (var i = 0; i < squares.length; i++) {
+                squares[i].style.backgroundColor = c;
+            }
+        }
+    </script>
+</html>
