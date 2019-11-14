@@ -18,15 +18,15 @@ function init() {
     document.querySelector("#hard").setAttribute("numSquares", "9");
 
     resetButton.addEventListener("click", gameReset);
-    for (let i = 0; i < modeButtons.length; i++) {
-        let updateMode = updateModeHandler.bind(modeButtons[i], modeButtons);
-        modeButtons[i].addEventListener("click", updateMode);
+    for (const btn of modeButtons) {
+        let updateMode = updateModeHandler.bind(btn, modeButtons);
+        btn.addEventListener("click", updateMode);
     }
 }
 
 function updateModeHandler(modeButtons) {
-    for (let b = 0; b < modeButtons.length; b++) {
-        modeButtons[b].classList.remove("selected");
+    for (const btn of modeButtons) {
+        btn.classList.remove("selected");
     }
     this.classList.add("selected");
     currentMode = this;
@@ -79,7 +79,6 @@ function pickColor() {
 
 function changeColor(c) {
     header.style.backgroundColor = colorDisplay.textContent;
-    let squares = document.querySelectorAll(".square");
     for (let i = 0; i < squares.length; i++) {
         squares[i].style.backgroundColor = c;
     }
