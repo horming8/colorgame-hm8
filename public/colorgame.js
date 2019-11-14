@@ -19,12 +19,12 @@ function init() {
 
     resetButton.addEventListener("click", gameReset);
     for (let i = 0; i < modeButtons.length; i++) {
-        let updateModel = updateModelHandler.bind(modeButtons[i], modeButtons);
-        modeButtons[i].addEventListener("click", updateModel);
+        let updateMode = updateModeHandler.bind(modeButtons[i], modeButtons);
+        modeButtons[i].addEventListener("click", updateMode);
     }
 }
 
-function updateModelHandler(modeButtons) {
+function updateModeHandler(modeButtons) {
     for (let b = 0; b < modeButtons.length; b++) {
         modeButtons[b].classList.remove("selected");
     }
